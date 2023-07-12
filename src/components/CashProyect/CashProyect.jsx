@@ -195,7 +195,7 @@ const CashProyect = () => {
     UpdateMetadata(metadata);
 
     const metadataNew = {
-                documentId: metadata?.documentId,
+      documentId: metadata?.documentId,
       metadata: metadata.metadataList,
     };
 
@@ -205,25 +205,25 @@ const CashProyect = () => {
     };
     setLoading(true);
     try {
-    const responseSesion = await callEndpoint(
-    updateMetadataService(metadataNew, Token)
-    );
-    if (responseSesion.status == 200) {
-    try {
-    const responseFile = await callEndpoint(
-    uploaderFiles(filesNew, Token)
-    );
-    if (responseFile.status == 200) {
-    setLoading(false);
-    navigate(`/authenticated/${PrivateRoutes.successForm}`);
-    }
-    } catch (error) {
-    console.log(error);
-     setLoading(false);
-    }
-    }
+      const responseSesion = await callEndpoint(
+        updateMetadataService(metadataNew, Token)
+      );
+      if (responseSesion.status == 200) {
+        try {
+          const responseFile = await callEndpoint(
+            uploaderFiles(filesNew, Token)
+          );
+          if (responseFile.status == 200) {
+            setLoading(false);
+            navigate(`/authenticated/${PrivateRoutes.successForm}`);
+          }
+        } catch (error) {
+          console.log(error);
+          setLoading(false);
+        }
+      }
     } catch (err) {
-    console.log(err);
+      console.log(err);
     }
   };
 
@@ -279,6 +279,21 @@ const CashProyect = () => {
                 <th>$ 15.294</th>
               </tr>
             </table>
+            <Box
+              sx={{
+                width: isMobile ? 340 : 800,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+                marginTop: 3,
+                marginBottom: 2,
+                textAlign: "center"
+              }}
+            >
+                <h1 style={{ color: 'red', fontSize: '20px' }}>MONTOS MAXIMOS PARA DEDUCCIÓN DE GASTOS PERSONALES</h1>
+              <span style={{ color: "red", fontWeight: 'bold' }}>Importante: Si debes reportar deducción por enfermedades catastróficas, raras y/o huerfanas por favor color `5` en el campo `Numero de Carga Familiares`</span>
+            </Box>
             <Box
               sx={{
                 width: isMobile ? 340 : 800,

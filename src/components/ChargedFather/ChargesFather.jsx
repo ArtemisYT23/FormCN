@@ -17,6 +17,7 @@ import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 import { UserAuth } from "../../context/AuthContext";
 import { useMediaQuery, useTheme } from "@mui/material";
+import { toast } from "react-hot-toast";
 
 const ChargesFather = () => {
   const {
@@ -34,8 +35,13 @@ const ChargesFather = () => {
   const [dateText, setDataText] = useState(null);
   const [cedulaText2, setCedulaText2] = useState(null);
   const [dateText2, setDataText2] = useState(null);
+  const [cedulaFile1, setCedulaFile1] = useState(null);
+  const [cedulaFile2, setCedulaFile2] = useState(null);
+  const [consentimientFile1, setConsentimientFile1] = useState(null);
+  const [consentimientFile2, setConsentimientFile2] = useState(null);
+  const [certificatedFile, setCertificatedFile] = useState(null);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     setChargedResponse(metadata?.metadataList[21]?.value);
@@ -64,7 +70,87 @@ const ChargesFather = () => {
       });
       UpdateMetadata(metadata);
     }
-    validateFather(true);
+
+    if (cedulaText == null || dateText == null) {
+      toast.error("Campos Requeridos faltantes");
+    }
+
+    if (cedulaText == "" || dateText == "") {
+      toast.error("Campos Requeridos faltantes");
+    }
+
+    if (twoFather) {
+      if (cedulaText2 == null && dateText2 == null) {
+        toast.error("Campos Requeridos faltantes");
+      }
+      if (cedulaText2 == "" && dateText2 == "") {
+        toast.error("Campos Requeridos faltantes");
+      }
+    }
+
+    if (cedulaFile1 == null && chargedRelation == "NO") {
+      toast.error("Archivos Sin Cargar Cedula Padre 1");
+    }
+    if (consentimientFile1 == null && chargedRelation == "NO") {
+      toast.error("Archivos Sin Cargar Consentimiento 1");
+    }
+    if (twoFather) {
+      if (cedulaFile2 == null && chargedRelation == "NO") {
+        toast.error("Archivos Sin Cargar Cedula Padre 2");
+      }
+      if (consentimientFile2 == null && chargedRelation == "NO") {
+        toast.error("Archivos Sin Cargar Consentimiento 2");
+      }
+    }
+    if (certificatedFile == null && chargedCatastrofica == "SI") {
+      toast.error("Archivos Sin Cargar Certificado");
+    }
+
+    if (
+      cedulaText != null &&
+      cedulaFile1 != null &&
+      consentimientFile1 != null &&
+      dateText != null &&
+      certificatedFile != null &&
+      chargedCatastrofica == "SI"
+    ) {
+      validateFather(true);
+    }
+
+    if (
+      cedulaText != null &&
+      cedulaFile1 != null &&
+      consentimientFile1 != null &&
+      dateText != null &&
+      certificatedFile == null &&
+      chargedCatastrofica == "NO"
+    ) {
+      validateFather(true);
+    }
+
+    if (twoFather) {
+      if (
+        cedulaFile2 != null &&
+        consentimientFile2 != null &&
+        cedulaText2 != null &&
+        dateText2 != null &&
+        certificatedFile != null &&
+        chargedCatastrofica == "SI"
+      ) {
+        validateFather(true);
+      }
+
+      if (
+        cedulaFile2 != null &&
+        consentimientFile2 != null &&
+        cedulaText2 != null &&
+        dateText2 != null &&
+        certificatedFile == null &&
+        chargedCatastrofica == "NO"
+      ) {
+        validateFather(true);
+      }
+    }
   };
 
   const handleChange = (value, indexId) => {
@@ -79,6 +165,7 @@ const ChargesFather = () => {
     setChargedResponse(value);
 
     value == "NO" && validateFather(true);
+    value == "SI" && validateFather(false);
   };
 
   const handleRelation = (value, indexId) => {
@@ -93,6 +180,7 @@ const ChargesFather = () => {
     setChargedRelacion(value);
     value == "SI" && setChargedCatastrofica(null);
     value == "SI" && validateFather(true);
+    value == "NO" && validateFather(false);
   };
 
   const handleCatastrofica = (value, indexId) => {
@@ -133,6 +221,7 @@ const ChargesFather = () => {
 
   const handleFileCatastrofica = (e) => {
     const File = e.target.files[0];
+    setCertificatedFile(File);
     const reader = new FileReader();
 
     reader.onload = () => {
@@ -153,6 +242,7 @@ const ChargesFather = () => {
 
   const handleFileOne = (e) => {
     const File = e.target.files[0];
+    setCedulaFile1(File);
     const reader = new FileReader();
 
     reader.onload = () => {
@@ -172,6 +262,7 @@ const ChargesFather = () => {
 
   const handleFileTwo = (e) => {
     const File = e.target.files[0];
+    setCedulaFile2(File);
     const reader = new FileReader();
 
     reader.onload = () => {
@@ -191,6 +282,7 @@ const ChargesFather = () => {
 
   const handleFileTwoConsent = (e) => {
     const File = e.target.files[0];
+    setConsentimientFile2(File);
     const reader = new FileReader();
 
     reader.onload = () => {
@@ -210,6 +302,7 @@ const ChargesFather = () => {
 
   const handleConsentimiento = (e) => {
     const File = e.target.files[0];
+    setConsentimientFile1(File);
     const reader = new FileReader();
 
     reader.onload = () => {
@@ -238,7 +331,11 @@ const ChargesFather = () => {
 
             <Box sx={{ display: "flex" }}>
               <Box
-                sx={{ width: isMobile ? 200 : 800, display: "flex", flexDirection: "column" }}
+                sx={{
+                  width: isMobile ? 200 : 800,
+                  display: "flex",
+                  flexDirection: "column",
+                }}
               >
                 <label>Tiene cargas-tipo padres? </label>
                 <FormControl>
@@ -344,6 +441,7 @@ const ChargesFather = () => {
                   onChange={handleFileOne}
                 />
                 <ButtonAdd onClick={() => handleClick()}>Añadir</ButtonAdd>
+
                 {twoFather && (
                   <ButtonAdd onClick={() => handleRes()}>Eliminar</ButtonAdd>
                 )}

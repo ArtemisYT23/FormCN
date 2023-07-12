@@ -5,6 +5,7 @@ import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
 import Button from "@mui/material/Button";
 import React, { useState } from "react";
+import { Toaster } from "react-hot-toast";
 import {
   PersonData,
   ChargedSpouse,
@@ -15,7 +16,7 @@ import {
 import { UserAuth } from "../../context/AuthContext";
 
 const FormPerson = () => {
-  const { valueState, valueStateFather } = UserAuth();
+  const { valueState, valueStateFather, valueStateConyugue } = UserAuth();
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState({});
 
@@ -90,7 +91,8 @@ const FormPerson = () => {
                 disabled={
                   activeStep === 4 ||
                   (valueState == false && activeStep === 2) ||
-                  (valueStateFather == false && activeStep === 3)
+                  (valueStateFather == false && activeStep === 3) ||
+                  (valueStateConyugue == false && activeStep === 1)
                 }
               >
                 Siguiente
@@ -99,6 +101,18 @@ const FormPerson = () => {
           </React.Fragment>
         </div>
       </Box>
+
+      <Toaster
+          position="top-right"
+          toastOptions={{
+            className: "",
+            duration: 3500,
+            style: {
+              background: "#f70707",
+              color: "#fff",
+            },
+          }}
+        />
     </ContainerDataForm>
   );
 };
