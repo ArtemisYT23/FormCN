@@ -71,3 +71,21 @@ export const InputCedula = styled.input`
      width: 90%;
   }
 `;
+
+export const ButtonAdd = styled.div`
+    width: 20%;
+    height: 30px;
+    margin-top: 1rem;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    background-color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    @media screen and (max-width: 767px) {
+    width: 120px;
+  }
+`;

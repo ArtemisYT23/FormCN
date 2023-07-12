@@ -6,6 +6,7 @@ import {
   ContentTitle,
   Title,
   InputCedula,
+  ButtonAdd,
 } from "./ChargedSpouse.styles";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -16,16 +17,25 @@ import { useMediaQuery, useTheme } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { useState, useEffect } from "react";
 import { UserAuth } from "../../context/AuthContext";
+import { toast } from "react-hot-toast";
 
 const ChargedSpouse = () => {
-  const { metadata, UpdateMetadata, AddFileData } = UserAuth();
+  const {
+    metadata,
+    UpdateMetadata,
+    AddFileData,
+    validateConyugue,
+    valueStateConyugue
+  } = UserAuth();
   const [chargedResponse, setChargedResponse] = useState(null);
   const [chargedRelation, setChargedRelation] = useState(null);
   const [chargedCertification, setChargedCertification] = useState(null);
   const [cedulaText, setCedulaText] = useState(null);
   const [dateText, setDataText] = useState(null);
+  const [cedulaFile, setCedulaFile] = useState(null);
+  const [certificateFile, setCertificatedFile] = useState(null);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     setChargedResponse(metadata?.metadataList[14]?.value);
@@ -58,6 +68,8 @@ const ChargedSpouse = () => {
     setChargedResponse(value);
     value == "NO" && setChargedRelation(null);
     value == "NO" && setChargedCertification(null);
+    value == "NO" && validateConyugue(true);
+    value == "SI" && validateConyugue(false);
   };
 
   const handleRelation = (value, indexId) => {
@@ -93,6 +105,7 @@ const ChargedSpouse = () => {
 
   const handleFileCedula = (e) => {
     const File = e.target.files[0];
+    setCedulaFile(File);
     const reader = new FileReader();
 
     reader.onload = () => {
@@ -114,6 +127,7 @@ const ChargedSpouse = () => {
 
   const handleFile = (e) => {
     const File = e.target.files[0];
+    setCertificatedFile(File);
     const reader = new FileReader();
 
     reader.onload = () => {
@@ -132,6 +146,35 @@ const ChargedSpouse = () => {
     reader.readAsDataURL(File);
   };
 
+  const handleValidate = () => {
+    if (cedulaText == null || dateText == null) {
+      toast.error("Campos Requeridos faltantes");
+    }
+    if (cedulaText == "" || dateText == "") {
+      toast.error("Campos Requeridos faltantes");
+    }
+    if (cedulaFile == null && chargedRelation == "NO") {
+      toast.error("Archivos Sin Cargar Cedula");
+    }
+    if (certificateFile == null && chargedCertification == "SI") {
+      toast.error("Archivos Sin Cargar Certificado");
+    }
+    if (
+      cedulaText != null &&
+      dateText != null &&
+      cedulaFile != null
+    ) {
+      validateConyugue(true);
+    }
+    if (
+      cedulaText != null &&
+      dateText != null &&
+      certificateFile != null && chargedCertification != "SI"
+    ) {
+      validateConyugue(true);
+    }
+  };
+
   return (
     <ContainerData>
       <ContentForm>
@@ -143,7 +186,11 @@ const ChargedSpouse = () => {
 
             <Box sx={{ display: "flex" }}>
               <Box
-                sx={{ width: isMobile ? 200 : 800, display: "flex", flexDirection: "column" }}
+                sx={{
+                  width: isMobile ? 200 : 800,
+                  display: "flex",
+                  flexDirection: "column",
+                }}
               >
                 <label>Tiene cargas-tipo conyuge? </label>
                 <FormControl>
@@ -220,10 +267,10 @@ const ChargedSpouse = () => {
                 }}
               >
                 <label>Cedula:</label>
-                <InputCedula maxLength={10} onChange={handleCedula} />
+                <InputCedula maxLength={10} onChange={handleCedula} required />
 
                 <label>Fecha Nacimiento:</label>
-                <InputCedula onChange={handleDate} type="date" />
+                <InputCedula onChange={handleDate} type="date" required />
                 <label>
                   Certificado de matrimonio, Unión de Hecho o Cédula de
                   identidad donde conste el cónyuge
@@ -233,6 +280,7 @@ const ChargedSpouse = () => {
                   variant="outlined"
                   type="file"
                   onChange={handleFileCedula}
+                  required
                 />
               </Box>
             )}
@@ -295,6 +343,27 @@ const ChargedSpouse = () => {
                   onChange={handleFile}
                 />
               </Box>
+            )}
+
+            {chargedCertification == "SI" && chargedRelation == "SI" && (
+              <ButtonAdd onClick={handleValidate}>
+                <input type="checkbox" checked={valueStateConyugue} />
+                Validar
+              </ButtonAdd>
+            )}
+
+            {chargedCertification == "NO" && chargedRelation == "NO" && (
+              <ButtonAdd onClick={handleValidate}>
+                <input type="checkbox" checked={valueStateConyugue} />
+                Validar
+              </ButtonAdd>
+            )}
+
+            {chargedCertification == "SI" && chargedRelation == "NO" && (
+              <ButtonAdd onClick={handleValidate}>
+                <input type="checkbox" checked={valueStateConyugue} />
+                Validar
+              </ButtonAdd>
             )}
           </Person>
         </ContentInput>

@@ -30,6 +30,8 @@ const AuthContext = createContext({
   validateChild: () => {},
   valueStateFather: false,
   validateFather: () => {},
+  valueStateConyugue: false,
+  validateConyugue: () => {},
 });
 
 export const AuthContextProvider = ({ children }) => {
@@ -44,6 +46,7 @@ export const AuthContextProvider = ({ children }) => {
   const [FileData, setFileData] = useState([]);
   const [valueState, setValueState] = useState(false);
   const [valueStateFather, setValueStateFather] = useState(false);
+  const [valueStateConyugue, setValueStateConyugue] = useState(false);
 
   const { callEndpoint } = useFetchAndLoad();
 
@@ -142,6 +145,10 @@ export const AuthContextProvider = ({ children }) => {
     setValueStateFather(bool);
   }
 
+  const validateConyugue = (bool) => {
+    setValueStateConyugue(bool);
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -160,7 +167,9 @@ export const AuthContextProvider = ({ children }) => {
         valueState,
         validateChild,
         valueStateFather,
-        validateFather
+        validateFather,
+        valueStateConyugue,
+        validateConyugue
       }}
     >
       {children}
