@@ -46,3 +46,12 @@ export const uploaderFiles = (fileData, TockenUser) => {
     }
 }
 
+export const sendEmail = (Cedula, TockenUser) => {
+    const controller = loadAbort();
+    return {
+        call: client(TockenUser).post(`EmailSender/${Cedula}`, {
+            signal: controller.signal,
+        }),
+    }
+}
+

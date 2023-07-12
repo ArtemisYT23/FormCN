@@ -15,7 +15,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { UserAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
-import { updateMetadataService, uploaderFiles } from "../../services";
+import { updateMetadataService, uploaderFiles, sendEmail } from "../../services";
 import { useFetchAndLoad } from "../../hooks";
 import { useNavigate } from "react-router-dom";
 import { PrivateRoutes } from "../../types/route.types";
@@ -214,6 +214,7 @@ const CashProyect = () => {
             uploaderFiles(filesNew, Token)
           );
           if (responseFile.status == 200) {
+            const responseEmail = await callEndpoint(sendEmail(cedula, Token));
             setLoading(false);
             navigate(`/authenticated/${PrivateRoutes.successForm}`);
           }
