@@ -15,12 +15,17 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { UserAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
-import { updateMetadataService, uploaderFiles, sendEmail } from "../../services";
+import {
+  updateMetadataService,
+  uploaderFiles,
+  sendEmail,
+} from "../../services";
 import { useFetchAndLoad } from "../../hooks";
 import { useNavigate } from "react-router-dom";
 import { PrivateRoutes } from "../../types/route.types";
 import { LoaderInfo } from "../../components";
 import { useMediaQuery, useTheme } from "@mui/material";
+import toast from "react-hot-toast";
 
 const CashProyect = () => {
   const navigate = useNavigate();
@@ -215,6 +220,9 @@ const CashProyect = () => {
           );
           if (responseFile.status == 200) {
             const responseEmail = await callEndpoint(sendEmail(cedula, Token));
+            if (responseEmail.status == 200) {
+              toast.success(responseEmail.data);
+            }
             setLoading(false);
             navigate(`/authenticated/${PrivateRoutes.successForm}`);
           }
@@ -289,11 +297,17 @@ const CashProyect = () => {
                 flexDirection: "column",
                 marginTop: 3,
                 marginBottom: 2,
-                textAlign: "center"
+                textAlign: "center",
               }}
             >
-                <h1 style={{ color: 'red', fontSize: '20px' }}>MONTOS MAXIMOS PARA DEDUCCIÓN DE GASTOS PERSONALES</h1>
-              <span style={{ color: "red", fontWeight: 'bold' }}>Importante: Si debes reportar deducción por enfermedades catastróficas, raras y/o huerfanas por favor color `5` en el campo `Numero de Carga Familiares`</span>
+              <h1 style={{ color: "red", fontSize: "20px" }}>
+                MONTOS MAXIMOS PARA DEDUCCIÓN DE GASTOS PERSONALES
+              </h1>
+              <span style={{ color: "red", fontWeight: "bold" }}>
+                Importante: Si debes reportar deducción por enfermedades
+                catastróficas, raras y/o huerfanas por favor color `5` en el
+                campo `Numero de Carga Familiares`
+              </span>
             </Box>
             <Box
               sx={{
