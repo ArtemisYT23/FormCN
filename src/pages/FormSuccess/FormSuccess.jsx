@@ -1,4 +1,5 @@
 import { ContainerHeader, ContainerForm1 } from "./FormSuccess.styles";
+import { Toaster } from "react-hot-toast";
 import "./FormSucess.css";
 
 const FormSuccess = () => {
@@ -31,6 +32,17 @@ const FormSuccess = () => {
             </b>
           </div>
         </ContainerForm1>
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            className: "",
+            duration: 3500,
+            style: {
+              background: "#f70707",
+              color: "#fff",
+            },
+          }}
+        />
       </ContainerHeader>
     </>
   );
