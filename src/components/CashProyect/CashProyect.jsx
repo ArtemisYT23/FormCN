@@ -221,10 +221,12 @@ const CashProyect = () => {
           if (responseFile.status == 200) {
             const responseEmail = await callEndpoint(sendEmail(cedula, Token));
             if (responseEmail.status == 200) {
+              // console.log(responseEmail);
               toast.success(responseEmail.data);
+              setLoading(false);
+              navigate(`/authenticated/${PrivateRoutes.successForm}`);
             }
-            setLoading(false);
-            navigate(`/authenticated/${PrivateRoutes.successForm}`);
+            
           }
         } catch (error) {
           console.log(error);

@@ -29,10 +29,10 @@ export const autenticated = () =>
         }
     })
 
-export const emailServer = () =>
+export const emailServer = (TockenUser) =>
     axios.create({
         baseURL: BASE_EMAIL,
         headers: {
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${TockenUser}`,
         }
     })
