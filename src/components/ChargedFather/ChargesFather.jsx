@@ -250,7 +250,7 @@ const ChargesFather = () => {
       const obj = {
         file: base64,
         nameFile: `${cedulaText} - ${dateText}`,
-        descriptionFile: `${cedulaText} - ${dateText}`,
+        descriptionFile: `cedula padres: ${cedulaText} - ${dateText}`,
         fileTypeId: "cf68991d-0b0e-4016-b43d-ededbd64eb58",
         fileTypeName: "CEDULA PADRES",
         isRequired: false,
@@ -270,7 +270,7 @@ const ChargesFather = () => {
       const obj = {
         file: base64,
         nameFile: `${cedulaText2} - ${dateText2}`,
-        descriptionFile: `${cedulaText2} - ${dateText2}`,
+        descriptionFile: `cedula padres 2 ${cedulaText2} - ${dateText2}`,
         fileTypeId: "cf68991d-0b0e-4016-b43d-ededbd64eb58",
         fileTypeName: "CEDULA PADRES",
         isRequired: false,
