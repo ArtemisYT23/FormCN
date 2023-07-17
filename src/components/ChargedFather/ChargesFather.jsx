@@ -166,6 +166,9 @@ const ChargesFather = () => {
 
     value == "NO" && validateFather(true);
     value == "SI" && validateFather(false);
+    value == "NO" && setChargedRelacion("NO");
+    value == "NO" && setChargedCatastrofica("NO");
+    
   };
 
   const handleRelation = (value, indexId) => {
@@ -398,7 +401,7 @@ const ChargesFather = () => {
               </Box>
             )}
 
-            {chargedRelation == "NO" && (
+            {chargedRelation == "NO" && chargedResponse == "SI" && (
               <Box
                 sx={{
                   width: isMobile ? 200 : 800,
@@ -479,7 +482,7 @@ const ChargesFather = () => {
               </Box>
             )}
 
-            {chargedRelation == "NO" && (
+            {chargedRelation == "NO" && chargedResponse == "SI" && (
               <Box
                 sx={{
                   width: isMobile ? 200 : 800,
@@ -514,7 +517,7 @@ const ChargesFather = () => {
               </Box>
             )}
 
-            {chargedCatastrofica == "SI" && (
+            {chargedCatastrofica == "SI" && chargedResponse == "SI" &&(
               <Box
                 sx={{
                   width: isMobile ? 200 : 800,
@@ -546,14 +549,14 @@ const ChargesFather = () => {
                 marginBottom: 3,
               }}
             >
-              {chargedCatastrofica == "SI" && (
+              {chargedCatastrofica == "SI" && chargedResponse == "SI" && (
                 <ButtonAdd onClick={handleSubmit}>
                   <input type="checkbox" checked={valueStateFather} />
                   Validar
                 </ButtonAdd>
               )}
 
-              {chargedCatastrofica == "NO" && (
+              {chargedCatastrofica == "NO" && chargedResponse == "SI" && (
                 <ButtonAdd onClick={handleSubmit}>
                   <input type="checkbox" checked={valueStateFather} />
                   Validar
