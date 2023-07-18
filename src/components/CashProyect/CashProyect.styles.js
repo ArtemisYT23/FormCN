@@ -124,3 +124,13 @@ export const ButtonAdd = styled.div`
     align-items: center;
     cursor: pointer;
 `;
+
+export const ContainerCheck = styled.div`
+  width: 100%;
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 1.5rem;
+`;
