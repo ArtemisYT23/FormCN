@@ -17,6 +17,7 @@ import TextField from "@mui/material/TextField";
 import { useState, useEffect } from "react";
 import { UserAuth } from "../../context/AuthContext";
 import { useMediaQuery, useTheme } from "@mui/material";
+import toast from "react-hot-toast";
 
 const ChargedChild = () => {
   const {
@@ -34,6 +35,7 @@ const ChargedChild = () => {
   const [chargedAge, setChargedAge] = useState(null);
   const [chargedWork, setChargedWork] = useState(null);
   const [inputValues, setInputValues] = useState([]);
+  const [fileChild, setFileChild] = useState(null);
   const [error, setError] = useState(false);
   const [valueIndex, setValueIndex] = useState(null);
   const theme = useTheme();
@@ -48,53 +50,59 @@ const ChargedChild = () => {
   }, [metadata]);
 
   const handleValidate = () => {
-    if (inputValues) {
-      validateChild(true);
-      const dataConcat = inputValues.filter((value) => value !== "");
-      const validItems = dataConcat.filter(
-        ({ cedula, fechaNacimiento }) => cedula && fechaNacimiento
-      );
+    if (fileChild == null) {
+      toast.error("Archivo Cedula Faltante");
+    } else {
+      if (inputValues) {
+        validateChild(true);
+        const dataConcat = inputValues.filter((value) => value !== "");
+        const validItems = dataConcat.filter(
+          ({ cedula, fechaNacimiento }) => cedula && fechaNacimiento
+        );
 
-      if (validItems.length === inputValues.length) {
-        const convertedText = validItems
-          .map(({ cedula, fechaNacimiento }) => `${cedula} ${fechaNacimiento}`)
-          .join(" - ");
-        // console.log(convertedText);
-        const hasConvertedText = metadata.metadataList.some((item) => {
-          return (
-            item.indexId === "d4aead7e-eed6-49cd-863f-bb5ce003db12" &&
-            item.value.includes(convertedText)
-          );
-        });
-
-        if (!hasConvertedText) {
-          metadata.metadataList.map((item) => {
-            if (item.indexId === "d4aead7e-eed6-49cd-863f-bb5ce003db12") {
-              item.value = `${convertedText}`;
-            }
-            return item;
+        if (validItems.length === inputValues.length) {
+          const convertedText = validItems
+            .map(
+              ({ cedula, fechaNacimiento }) => `${cedula} ${fechaNacimiento}`
+            )
+            .join(" - ");
+          // console.log(convertedText);
+          const hasConvertedText = metadata.metadataList.some((item) => {
+            return (
+              item.indexId === "d4aead7e-eed6-49cd-863f-bb5ce003db12" &&
+              item.value.includes(convertedText)
+            );
           });
 
-          UpdateMetadata(metadata);
-        }
-      }
+          if (!hasConvertedText) {
+            metadata.metadataList.map((item) => {
+              if (item.indexId === "d4aead7e-eed6-49cd-863f-bb5ce003db12") {
+                item.value = `${convertedText}`;
+              }
+              return item;
+            });
 
-      inputValues.forEach((item) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const base64 = reader.result;
-          const obj = {
-            file: base64,
-            nameFile: `${item.cedula} - ${item.fechaNacimiento}`,
-            descriptionFile: `${item.cedula} - ${item.fechaNacimiento}`,
-            fileTypeId: "86f9dfe7-086c-4ae6-a415-309b46d23fce",
-            fileTypeName: "CEDULA HIJO",
-            isRequired: false,
+            UpdateMetadata(metadata);
+          }
+        }
+
+        inputValues.forEach((item) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            const base64 = reader.result;
+            const obj = {
+              file: base64,
+              nameFile: `${item.cedula} - ${item.fechaNacimiento}`,
+              descriptionFile: `${item.cedula} - ${item.fechaNacimiento}`,
+              fileTypeId: "86f9dfe7-086c-4ae6-a415-309b46d23fce",
+              fileTypeName: "CEDULA HIJO",
+              isRequired: false,
+            };
+            AddFileData(obj);
           };
-          AddFileData(obj);
-        };
-        reader.readAsDataURL(item.file);
-      });
+          reader.readAsDataURL(item.file);
+        });
+      }
     }
   };
 
@@ -198,6 +206,9 @@ const ChargedChild = () => {
         setError(null);
         setValueIndex(null);
       }
+    }
+    if (fieldName == "file") {
+      setFileChild(value);
     }
     setInputValues((prevValues) => {
       const updatedValues = [...prevValues];

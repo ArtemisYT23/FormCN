@@ -9,6 +9,7 @@ import {
   ContentDeclaration,
   ButtonAdd,
   ContentButton,
+  ContainerCheck,
 } from "./CashProyect.styles";
 import Box from "@mui/material/Box";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -29,9 +30,18 @@ import toast from "react-hot-toast";
 
 const CashProyect = () => {
   const navigate = useNavigate();
-  const { metadata, UpdateMetadata, cedula, FileData, Token } = UserAuth();
-  const { callEndpoint } = useFetchAndLoad();
+  const {
+    metadata,
+    UpdateMetadata,
+    cedula,
+    FileData,
+    valueState,
+    valueStateFather,
+    valueStateConyugue,
+    Token
+  } = UserAuth();
   const [numberFamily, setNumberFamily] = useState(0);
+  const { callEndpoint } = useFetchAndLoad();
   const [basicFamily, setBasicFamily] = useState(0);
   const [cashHouse, setCashHouse] = useState(0);
   const [cashEducation, setCashEducation] = useState(0);
@@ -211,34 +221,34 @@ const CashProyect = () => {
       documentId: metadata?.documentId,
       fileData: FileData,
     };
-    //setLoading(true);
-  //   try {
-  //     const responseSesion = await callEndpoint(
-  //       updateMetadataService(metadataNew, Token)
-  //     );
-  //     if (responseSesion.status == 200) {
-  //       try {
-  //         const responseFile = await callEndpoint(
-  //           uploaderFiles(filesNew, Token)
-  //         );
-  //         if (responseFile.status == 200) {
-  //           const responseEmail = await callEndpoint(sendEmail(cedula, Token));
-  //           if (responseEmail.status == 200) {
-  //             // console.log(responseEmail);
-  //             toast.success(responseEmail.data);
-  //             setLoading(false);
-  //             navigate(`/authenticated/${PrivateRoutes.successForm}`);
-  //           }
-            
-  //         }
-  //       } catch (error) {
-  //         console.log(error);
-  //         setLoading(false);
-  //       }
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
+    setLoading(true);
+      try {
+        const responseSesion = await callEndpoint(
+          updateMetadataService(metadataNew, Token)
+        );
+        if (responseSesion.status == 200) {
+          try {
+            const responseFile = await callEndpoint(
+              uploaderFiles(filesNew, Token)
+            );
+            if (responseFile.status == 200) {
+              const responseEmail = await callEndpoint(sendEmail(cedula, Token));
+              if (responseEmail.status == 200) {
+                // console.log(responseEmail);
+                toast.success(responseEmail.data);
+                setLoading(false);
+                navigate(`/authenticated/${PrivateRoutes.successForm}`);
+              }
+
+            }
+          } catch (error) {
+            console.log(error);
+            setLoading(false);
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
   };
 
   const handleState = (value) => {
@@ -310,7 +320,7 @@ const CashProyect = () => {
               </h1>
               <span style={{ color: "red", fontWeight: "bold" }}>
                 Importante: Si debes reportar deducción por enfermedades
-                catastróficas, raras y/o huerfanas por favor color `5` en el
+                catastróficas, raras y/o huerfanas por favor colocar `5` en el
                 campo `Numero de Carga Familiares`
               </span>
             </Box>
@@ -429,12 +439,24 @@ const CashProyect = () => {
                     deducción de impuesto a la renta para el presente ejercicio
                     fiscal.
                   </label>
+                  
+
+                  <ContainerCheck>
+                    <label>Carga Familiar Conyugue</label>
+                    <input type="checkbox" checked={valueStateConyugue} />
+                    <label>Carga Familiar Padres</label>
+                    <input type="checkbox" checked={valueStateFather} />
+                    <label>Carga Familiar Hijos</label>
+                    <input type="checkbox" checked={valueState} />
+                  </ContainerCheck>
+
                   <FormControlLabel
                     control={<Checkbox />}
                     label="Aceptar Terminos Y Condiciones"
                     onChange={(e) => handleState(e.target.checked)}
                   />
-                  {stateConfirm && (
+
+                  {stateConfirm && valueState &&  valueStateFather && valueStateConyugue && (
                     <>
                       {loading ? (
                         <LoaderInfo />
