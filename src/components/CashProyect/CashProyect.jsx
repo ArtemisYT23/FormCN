@@ -199,6 +199,9 @@ const CashProyect = () => {
 
     UpdateMetadata(metadata);
 
+    console.log(metadata.metadataList);
+    console.log(FileData);
+
     const metadataNew = {
       documentId: metadata?.documentId,
       metadata: metadata.metadataList,
@@ -208,34 +211,34 @@ const CashProyect = () => {
       documentId: metadata?.documentId,
       fileData: FileData,
     };
-    setLoading(true);
-    try {
-      const responseSesion = await callEndpoint(
-        updateMetadataService(metadataNew, Token)
-      );
-      if (responseSesion.status == 200) {
-        try {
-          const responseFile = await callEndpoint(
-            uploaderFiles(filesNew, Token)
-          );
-          if (responseFile.status == 200) {
-            const responseEmail = await callEndpoint(sendEmail(cedula, Token));
-            if (responseEmail.status == 200) {
-              // console.log(responseEmail);
-              toast.success(responseEmail.data);
-              setLoading(false);
-              navigate(`/authenticated/${PrivateRoutes.successForm}`);
-            }
+    //setLoading(true);
+  //   try {
+  //     const responseSesion = await callEndpoint(
+  //       updateMetadataService(metadataNew, Token)
+  //     );
+  //     if (responseSesion.status == 200) {
+  //       try {
+  //         const responseFile = await callEndpoint(
+  //           uploaderFiles(filesNew, Token)
+  //         );
+  //         if (responseFile.status == 200) {
+  //           const responseEmail = await callEndpoint(sendEmail(cedula, Token));
+  //           if (responseEmail.status == 200) {
+  //             // console.log(responseEmail);
+  //             toast.success(responseEmail.data);
+  //             setLoading(false);
+  //             navigate(`/authenticated/${PrivateRoutes.successForm}`);
+  //           }
             
-          }
-        } catch (error) {
-          console.log(error);
-          setLoading(false);
-        }
-      }
-    } catch (err) {
-      console.log(err);
-    }
+  //         }
+  //       } catch (error) {
+  //         console.log(error);
+  //         setLoading(false);
+  //       }
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
   };
 
   const handleState = (value) => {
