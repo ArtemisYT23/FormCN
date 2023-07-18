@@ -187,17 +187,20 @@ const CashProyect = () => {
       (item) => item.indexId === "5d37c043-51dd-4dc9-8b55-ddee3e20af83"
     );
     if (elementoModificar) {
-      elementoModificar.value = parseInt(elementoModificar.value * 12);
+      elementoModificar.value = parseInt(elementoModificar.value * 1);
     }
 
     const elementoList = metadata.metadataList.find(
       (item) => item.indexId === "5c13fe51-6d08-4b90-a141-f49956917770"
     );
     if (elementoList) {
-      elementoList.value = parseInt(elementoList.value * 12);
+      elementoList.value = parseInt(elementoList.value * 1);
     }
 
     UpdateMetadata(metadata);
+
+    console.log(metadata.metadataList);
+    console.log(FileData);
 
     const metadataNew = {
       documentId: metadata?.documentId,
@@ -208,34 +211,34 @@ const CashProyect = () => {
       documentId: metadata?.documentId,
       fileData: FileData,
     };
-    setLoading(true);
-    try {
-      const responseSesion = await callEndpoint(
-        updateMetadataService(metadataNew, Token)
-      );
-      if (responseSesion.status == 200) {
-        try {
-          const responseFile = await callEndpoint(
-            uploaderFiles(filesNew, Token)
-          );
-          if (responseFile.status == 200) {
-            const responseEmail = await callEndpoint(sendEmail(cedula, Token));
-            if (responseEmail.status == 200) {
-              // console.log(responseEmail);
-              toast.success(responseEmail.data);
-              setLoading(false);
-              navigate(`/authenticated/${PrivateRoutes.successForm}`);
-            }
+    //setLoading(true);
+  //   try {
+  //     const responseSesion = await callEndpoint(
+  //       updateMetadataService(metadataNew, Token)
+  //     );
+  //     if (responseSesion.status == 200) {
+  //       try {
+  //         const responseFile = await callEndpoint(
+  //           uploaderFiles(filesNew, Token)
+  //         );
+  //         if (responseFile.status == 200) {
+  //           const responseEmail = await callEndpoint(sendEmail(cedula, Token));
+  //           if (responseEmail.status == 200) {
+  //             // console.log(responseEmail);
+  //             toast.success(responseEmail.data);
+  //             setLoading(false);
+  //             navigate(`/authenticated/${PrivateRoutes.successForm}`);
+  //           }
             
-          }
-        } catch (error) {
-          console.log(error);
-          setLoading(false);
-        }
-      }
-    } catch (err) {
-      console.log(err);
-    }
+  //         }
+  //       } catch (error) {
+  //         console.log(error);
+  //         setLoading(false);
+  //       }
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
   };
 
   const handleState = (value) => {

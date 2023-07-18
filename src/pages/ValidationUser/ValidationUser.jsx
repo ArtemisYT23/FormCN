@@ -20,8 +20,8 @@ const ValidationUser = () => {
 
   const onSubmit = (data) => {
     const useData = {
-      userName: "admincn",
-      password: "12345",
+      userName: "cerveceriaadmin",
+      password: "DyeqEMa8UjE=",
     };
     SignInDashboard(useData, data?.cedula);
   };

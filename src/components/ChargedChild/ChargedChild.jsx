@@ -19,7 +19,15 @@ import { UserAuth } from "../../context/AuthContext";
 import { useMediaQuery, useTheme } from "@mui/material";
 
 const ChargedChild = () => {
-  const { metadata, UpdateMetadata, index, AddFileData, validateChild, valueState } = UserAuth();
+  const {
+    metadata,
+    UpdateMetadata,
+    index,
+    AddFileData,
+    validateChild,
+    valueState,
+    FileData,
+  } = UserAuth();
   const [chargedResponse, setChargedResponse] = useState(null);
   const [chargedDiscapacity, setChargedDiscapacity] = useState(null);
   const [chargedCatastrofica, setChargedCatastrofica] = useState(null);
@@ -29,7 +37,7 @@ const ChargedChild = () => {
   const [error, setError] = useState(false);
   const [valueIndex, setValueIndex] = useState(null);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     setChargedResponse(metadata?.metadataList[17]?.value);
@@ -38,10 +46,6 @@ const ChargedChild = () => {
     setChargedAge(metadata?.metadataList[19]?.value);
     setChargedWork(metadata?.metadataList[20]?.value);
   }, [metadata]);
-
-  useEffect(() => {
-    console.log(inputValues);
-  }, [inputValues]);
 
   const handleValidate = () => {
     if (inputValues) {
@@ -55,14 +59,24 @@ const ChargedChild = () => {
         const convertedText = validItems
           .map(({ cedula, fechaNacimiento }) => `${cedula} ${fechaNacimiento}`)
           .join(" - ");
-        console.log(convertedText);
-        metadata.metadataList.map((item) => {
-          if (item.indexId == "d4aead7e-eed6-49cd-863f-bb5ce003db12") {
-            item.value = `${item.value}-${convertedText}`;
-            return item;
-          }
+        // console.log(convertedText);
+        const hasConvertedText = metadata.metadataList.some((item) => {
+          return (
+            item.indexId === "d4aead7e-eed6-49cd-863f-bb5ce003db12" &&
+            item.value.includes(convertedText)
+          );
         });
-        UpdateMetadata(metadata);
+
+        if (!hasConvertedText) {
+          metadata.metadataList.map((item) => {
+            if (item.indexId === "d4aead7e-eed6-49cd-863f-bb5ce003db12") {
+              item.value = `${convertedText}`;
+            }
+            return item;
+          });
+
+          UpdateMetadata(metadata);
+        }
       }
 
       inputValues.forEach((item) => {
@@ -152,6 +166,7 @@ const ChargedChild = () => {
     UpdateMetadata(metadata);
     setChargedWork(value);
     value == "SI" && validateChild(true);
+    value == "NO" && validateChild(false);
   };
 
   const handleSum = () => {
@@ -224,7 +239,11 @@ const ChargedChild = () => {
             </ContentTitle>
             <Box sx={{ display: "flex" }}>
               <Box
-                sx={{ width: isMobile ? 200 : 800, display: "flex", flexDirection: "column" }}
+                sx={{
+                  width: isMobile ? 200 : 800,
+                  display: "flex",
+                  flexDirection: "column",
+                }}
               >
                 <label>Tiene cargas-tipo hijos? </label>
                 <FormControl>
@@ -465,7 +484,9 @@ const ChargedChild = () => {
                       }
                     />
                     <label>Fecha Nacimiento: </label>
-                    {error && index == valueIndex && <label style={{ color: "red" }}>{error}</label>}
+                    {error && index == valueIndex && (
+                      <label style={{ color: "red" }}>{error}</label>
+                    )}
                     <InputCedula
                       onChange={(e) =>
                         handleInputChange(
